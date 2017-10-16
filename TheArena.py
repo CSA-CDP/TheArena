@@ -31,7 +31,10 @@ stage2img = pygame.image.load('stage2.png')
 titleimg = pygame.image.load('Title.png')
 startimg = pygame.image.load('Start.png')
 statsimg = pygame.image.load('Statsbar.png')
-arrowimg = pygame.image.load('Arrow.png')
+arrowimgTR = pygame.image.load('ArrowTR.png')
+arrowimgDR = pygame.image.load('ArrowDR.png')
+arrowimgTL = pygame.image.load('ArrowTL.png')
+arrowimgDL = pygame.image.load('ArrowDL.png')
 global archerx
 global archery
 archerx = 215
@@ -41,6 +44,7 @@ global enemyy
 enemyx = 50
 enemyy = 50
 
+global wavenumber
 global enemyhealthcounter
 enemyhealthcounter = 20
 
@@ -245,24 +249,32 @@ class Arrow(pygame.sprite.Sprite):
         # Call the parent class (Sprite) constructor
         super().__init__()
 
-        self.image = arrowimg
+        self.image = arrowimgDR
 
         self.rect = self.image.get_rect()
 
     def update(self):
         """ Move the arrow. """
         if mousex > player.rect.x and mousey > player.rect.y:
+            self.image = arrowimgDR
             self.rect.x += ((mousex - player.rect.x) / 10)
             self.rect.y += ((mousey - player.rect.y) / 10)
         elif mousex < player.rect.x and mousey > player.rect.y:
+            self.image = arrowimgDL
             self.rect.x -= ((player.rect.x -mousex) / 10)
             self.rect.y += ((mousey - player.rect.y) / 10)
         elif mousex > player.rect.x and mousey < player.rect.y:
+            self.image = arrowimgTR
             self.rect.x += ((mousex - player.rect.x) / 10)
             self.rect.y -= ((player.rect.y - mousey) / 10)
         elif mousex < player.rect.x and mousey < player.rect.y:
+            self.image = arrowimgTL
             self.rect.x -= ((player.rect.x - mousex) / 10)
             self.rect.y -= ((player.rect.y - mousey) / 10)
+
+
+
+
 
         if self.rect.x > 420 or self.rect.x < 20:
             all_sprites_list.remove(self)
@@ -439,7 +451,6 @@ def Game():
 
         if 'enemy' not in enemylist:
             time.sleep(1)
-            global wavenumber
             global enemyhealthcounter
             wavenumber  += 1
             if wavenumber <= 4:
